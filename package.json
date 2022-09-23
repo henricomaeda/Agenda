@@ -1,0 +1,36 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~46.0.9",
+    "expo-status-bar": "~1.4.0",
+    "react": "18.0.0",
+    "react-native": "0.69.5",
+    "moment": "*",
+    "date-fns": "*",
+    "expo-constants": "~13.2.4",
+    "react-navigation": "*",
+    "expo-secure-store": "~11.3.0",
+    "@expo/vector-icons": "^13.0.0",
+    "react-native-paper": "4.9.2",
+    "react-native-screens": "~3.15.0",
+    "react-native-elements": "*",
+    "react-native-code-push": "*",
+    "@react-navigation/stack": "*",
+    "@react-navigation/native": "*",
+    "react-native-size-matters": "*",
+    "react-native-dropdown-picker": "*",
+    "react-native-gesture-handler": "~2.5.0",
+    "react-native-safe-area-context": "4.3.1",
+    "@react-native-community/datetimepicker": "6.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9"
+  },
+  "private": true
+}
