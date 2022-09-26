@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "calendar-mobile",
+    "name": "Calendar",
     "slug": "snack-20acb39a-29a9-4d29-89a8-70031f31526f",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.henrico.maeda.snack20acb39a29a94d2989a870031f31526f"
     },
     "web": {
       "favicon": "./assets/favicon.png"
