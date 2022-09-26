@@ -15,4 +15,4 @@ Posteriormente, instalar o aplicativo (no celular).
 
 ## Observações do desenvolvimento
 
-Para o desenvolvimento do aplicativo e código fonte, foi utilizado a plataforma 2022 Expo (Go e Dev).
+Para o desenvolvimento do aplicativo e código fonte, foi utilizado a plataforma 2022 Expo (Dev e Go) e EAS.
