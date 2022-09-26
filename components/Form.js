@@ -394,17 +394,18 @@ const Form = ({navigation}) => {
 				</View>
 				<Text> Categoria </Text>
 				<DropDownPicker
-					style={styles.input}
+					style={[styles.input, {zIndex: 2000}]}
 					textStyle={{color: "black"}}
 					dropDownContainerStyle={styles.input}
 					placeholder="Entre com uma categoria"
+          nestedScrollEnabled={true}
 					open={cmbOpen}
 					value={category}
 					items={cmbItems}
+          listMode="SCROLLVIEW"
 					setOpen={setCmbOpen}
 					setValue={setCategory}
 					setItems={setCmbItems}
-					theme='DARK'
 				/>
 				<Text> Descrição </Text>
 				<TextInput
