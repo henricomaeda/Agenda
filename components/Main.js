@@ -1,6 +1,7 @@
 import {StackActions} from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
-import {useState, useEffect} from 'react';
+import * as SecureStore from "expo-secure-store";
+import {Notification} from "../Notification";
+import {useState, useEffect} from "react";
 import {
 	Text,
 	View,
@@ -14,7 +15,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 
-const Main=({navigation}) => {
+const Main = ({navigation}) => {
 	// Definindo variáveis de objeto.
 	const [today, setToday] = useState([]);
 	const [tomorrow, setTomorrow] = useState([]);
@@ -110,6 +111,10 @@ const Main=({navigation}) => {
 			(objA, objB) => Number(new Date(objA.finalDate)) - Number(new Date(objB.finalDate)),
 		))));
 		
+		// Notificando se há eventos hoje para o usuário.
+		if (today.length > 0) Notification("Calendar ©", "Há " + today.length + " evento (s) para hoje!");
+		else Notification("Calendar ©", "Fique tranquilo (a), não há eventos para hoje!");
+		
 		// Exibindo interface ao usuário.
 		const delay = ms => new Promise(res => setTimeout(res, ms));
 		await delay(600);
@@ -190,7 +195,7 @@ const Main=({navigation}) => {
 		global.id = selectedEvent.id;
 		
 		// Exibindo formulário ao usuário.
-		navigation.dispatch(StackActions.replace("Form"));
+		navigation.navigate("Form");
 	}
 	
 	// Exibindo os dados dos eventos ao usuário.
@@ -254,16 +259,18 @@ const Main=({navigation}) => {
 							}}>
 							<Text
 								style={{
-									fontSize: 15,
-									marginTop: 8,
-									marginLeft: 2,
-									marginBottom: 4,
 									color: "white",
+									paddingLeft: 8,
+									flexDirection: "row",
+									marginBottom: 4,
+									marginTop: 8,
 								}}>
-								<Text style={{
-									fontSize: 20,
-									fontWeight: "bold",
-								}}> {item.name} </Text>({item.category})
+								<Text style={{fontSize: 20, fontWeight: "bold"}}> 
+									{item.name}
+								</Text>
+								<Text style={{fontSize: 10}}>
+									{"  "}{item.category}
+								</Text>
 							</Text>
 							<View style={{flexDirection: "row"}}>
 								<View
@@ -320,11 +327,7 @@ const Main=({navigation}) => {
 										) : null}
 									</View>
 								</View>
-								<View
-									style={{
-										justifyContent: "center",
-										borderColor: "#1f3447",
-									}}>
+								<View style={{justifyContent: "center", borderColor: "#1f3447"}}>
 									<View style={{flexDirection: "row"}}>
 										<View>
 											<Text style={[styles.label, {fontWeight: "bold"}]}>
@@ -404,10 +407,7 @@ const Main=({navigation}) => {
 					marginBottom: 10,
 					color: "#424059",
 				}}>
-				Aplicativo desenvolvido por{' '}
-				<Text style={{fontWeight: "bold"}}>
-					Henrico Maeda.
-				</Text>
+				Aplicativo desenvolvido por <Text style={{fontWeight: "bold"}}>Henrico Maeda</Text>.
 			</Text>
 		</View>
 	);
@@ -457,7 +457,7 @@ const Main=({navigation}) => {
 					]}
 					onPress={async () => {
 						const response = await SecureStore.getItemAsync("events");
-						if (response == null || response == "") Alert.alert("Calendar ©", "Não há dados a serem removidos.");
+						if (response == null || response == "") Alert.alert("Nenhum evento", "Não há dados a serem removidos.");
 						else {
 							Alert.alert(
 								"Os dados serão removidos",
@@ -477,10 +477,10 @@ const Main=({navigation}) => {
 													let filteredData = data.filter(item => now.getTime() < new Date(item.finalDate).getTime());
 													if (filteredData.length > 0) SecureStore.setItemAsync("events", JSON.stringify(filteredData));
 													else SecureStore.setItemAsync("events", "");
-													Alert.alert("Calendar ©", "Os eventos passados foram removidos!");
+													Alert.alert("Eventos passados", "Os dados foram removidos!");
 													navigation.dispatch(StackActions.replace("Main"));
 												}
-												else Alert.alert("Calendar ©", "Não há eventos passados salvos!");
+												else Alert.alert("Nenhum evento passado", "Não há dados a serem removidos.");
 											}
 										},
 									},
@@ -489,7 +489,7 @@ const Main=({navigation}) => {
 										text: "Todos",
 										onPress: async () => {
 											SecureStore.setItemAsync("events", "");
-											Alert.alert("Calendar ©", "Todos os eventos foram removidos!");
+											Alert.alert("Todos os eventos", "Os dados foram removidos!");
 											navigation.dispatch(StackActions.replace("Main"));
 										},
 									},
@@ -501,7 +501,7 @@ const Main=({navigation}) => {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.button}
-					onPress={() => navigation.dispatch(StackActions.replace("Form"))}>
+					onPress={() => navigation.navigate("Form")}>
 					<Text style={styles.buttonText}> Adicionar evento </Text>
 				</TouchableOpacity>
 			</View>

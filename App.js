@@ -71,7 +71,10 @@ const App=() => {
 					headerLeft: () => (
 						<TouchableOpacity
 							style={{marginLeft: 12}}
-							onPress={() => navigation.dispatch(StackActions.replace("Main"))}>
+							onPress={() => {
+								navigation.popToTop();
+								navigation.dispatch(StackActions.replace("Main"));
+							}}>
 							<Icon name="arrow-back" color="white" />
 						</TouchableOpacity>
 					),
@@ -84,7 +87,7 @@ const App=() => {
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={{marginRight: 20}}
-								onPress={() => navigation.dispatch(StackActions.replace("Form"))}>
+								onPress={() => navigation.navigate("Form")}>
 								<Icon name="playlist-add" color="white" />
 							</TouchableOpacity>
 						</View>

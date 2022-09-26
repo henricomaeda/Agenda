@@ -259,10 +259,11 @@ const Form = ({navigation}) => {
 				SecureStore.setItemAsync("events", JSON.stringify(temporaryEvents));
 				
 				// Enviando resposta ao usuário.
-				if (creating) Alert.alert(name, "O evento foi adicionado com sucesso!");
-				else Alert.alert(name, "O evento foi atualizado com sucesso!");
+				if (creating) Alert.alert(name, "O evento foi adicionado!");
+				else Alert.alert(name, "O evento foi atualizado!");
 				
 				// Atualizando controle de imagem.
+				navigation.popToTop();
 				navigation.dispatch(StackActions.replace("Main"));
 			}
 			
@@ -286,7 +287,7 @@ const Form = ({navigation}) => {
 			else {
 				Alert.alert(
 					"Os dados serão atualizados",
-					"Você deseja mesmo alterar os dados?",
+					"Você deseja mesmo alterá-los?",
 					[
 						{text: "Cancelar"},
 						{
@@ -318,17 +319,8 @@ const Form = ({navigation}) => {
 	};
 	
 	return (
-		<ScrollView
-			contentContainerStyle={{
-				flexGrow: 1,
-				alignItems: "center",
-			}}>
-			<View
-				style={{
-					flex: 1,
-					padding: 30,
-					justifyContent: "center",
-				}}>
+		<ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: "center"}}>
+			<View style={{margin: 30}}>
 				<Text> Nome do evento ou lembrete </Text>
 				<TextInput
 					style={styles.input}
@@ -380,10 +372,7 @@ const Form = ({navigation}) => {
 									alignItems: "center",
 								},
 							]}
-							onPress={() => {
-								if (allDay) Alert.alert("Dia inteiro", "Desmarque o dia inteiro.");
-								else showMode(true, "time");
-							}}>
+							onPress={() => !allDay && showMode(true, "time")}>
 							<Text> {initialTime} </Text>
 						</TouchableOpacity>
 					</View>
@@ -398,10 +387,7 @@ const Form = ({navigation}) => {
 									alignItems: "center",
 								},
 							]}
-							onPress={() => {
-								if (allDay) Alert.alert("Dia inteiro", "Desmarque o dia inteiro.");
-								else showMode(false, "time");
-							}}>
+							onPress={() => !allDay && showMode(false, "time")}>
 							<Text> {finalTime} </Text>
 						</TouchableOpacity>
 					</View>
@@ -492,7 +478,6 @@ const Form = ({navigation}) => {
 							{
 								marginRight: 6,
 								backgroundColor: "#646085",
-								width: (Dimensions.get("window").width / 3) - 60,
 							},
 						]}
 						onPress={() => navigation.dispatch(StackActions.replace("Main"))}>
@@ -504,18 +489,17 @@ const Form = ({navigation}) => {
 							{
 								marginRight: 6,
 								backgroundColor: "#53506e",
-								width: (Dimensions.get("window").width / 3) - 11,
 							},
 						]}
 						onPress={() => reset()}>
-						<Text style={styles.buttonText}> Resetar campos </Text>
+						<Text style={styles.buttonText}> Resetar </Text>
 					</TouchableOpacity>
 					{global.id == -1 ? (
 						<TouchableOpacity
 							style={styles.button}
 							onPress={() => create()}>
 							<Text style={styles.buttonText}>
-								Adicionar evento
+								Adicionar
 							</Text>
 						</TouchableOpacity>
 					) : (
@@ -523,32 +507,32 @@ const Form = ({navigation}) => {
 							style={styles.button}
 							onPress={() => create(false)}>
 							<Text style={styles.buttonText}>
-								Atualizar evento
+								Atualizar
 							</Text>
 						</TouchableOpacity>
 					)}
 				</View>
+				{dtpInitialShow && (
+					<DateTimePicker
+						testID="dateTimePicker"
+						value={dtpInitialDate}
+						mode={dtpMode}
+						is24Hour={true}
+						display="default"
+						onChange={dtpInitialChange}
+					/>
+				)}
+				{dtpFinalShow && (
+					<DateTimePicker
+						testID="dateTimePicker"
+						value={dtpFinalDate}
+						mode={dtpMode}
+						is24Hour={true}
+						display="default"
+						onChange={dtpFinalChange}
+					/>
+				)}
 			</View>
-			{dtpInitialShow && (
-				<DateTimePicker
-					testID="dateTimePicker"
-					value={dtpInitialDate}
-					mode={dtpMode}
-					is24Hour={true}
-					display="default"
-					onChange={dtpInitialChange}
-				/>
-			)}
-			{dtpFinalShow && (
-				<DateTimePicker
-					testID="dateTimePicker"
-					value={dtpFinalDate}
-					mode={dtpMode}
-					is24Hour={true}
-					display="default"
-					onChange={dtpFinalChange}
-				/>
-			)}
 		</ScrollView>
 	);
 };
@@ -582,12 +566,12 @@ const styles = StyleSheet.create({
 	},
 	
 	button: {
-		width: Dimensions.get("window").width / 3,
 		padding: 10,
 		borderRadius: 10,
 		marginBottom: 10,
 		alignItems: "center",
 		backgroundColor: global.headerBackgroundColor,
+		width: (Dimensions.get("window").width / 3) - 24,
 	},
 	
 	buttonText: {
