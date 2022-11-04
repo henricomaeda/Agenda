@@ -326,6 +326,7 @@ const Form = ({navigation}) => {
 					style={styles.input}
 					placeholder="Entre com o nome do evento"
 					onChangeText={(text) => setName(text)}
+					maxLength={30}
 					value={name}
 				/>
 				{required ? (

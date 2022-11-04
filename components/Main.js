@@ -111,10 +111,6 @@ const Main = ({navigation}) => {
 			(objA, objB) => Number(new Date(objA.finalDate)) - Number(new Date(objB.finalDate)),
 		))));
 		
-		// Notificando se há eventos hoje para o usuário.
-		if (today.length > 0) Notification("Calendar ©", "Há " + today.length + " evento (s) para hoje!");
-		else Notification("Calendar ©", "Fique tranquilo (a), não há eventos para hoje!");
-		
 		// Exibindo interface ao usuário.
 		const delay = ms => new Promise(res => setTimeout(res, ms));
 		await delay(600);
@@ -233,7 +229,7 @@ const Main = ({navigation}) => {
 		}
 		
 		if (data.length <= 0) return (
-			<Text style={{marginBottom: 10, marginLeft: 20}}>
+			<Text style={{fontSize: 16, marginBottom: 10, marginLeft: 20, color: "#6aa374"}}>
 				Não há eventos ou lembretes
 				{
 					data == today ? " para hoje."
@@ -259,18 +255,22 @@ const Main = ({navigation}) => {
 							}}>
 							<Text
 								style={{
+									fontWeight: "bold",
+									paddingLeft: 8,
+									color: "white",
+									marginTop: 8,
+									fontSize: 20,
+								}}>
+								{item.name}
+							</Text>
+							<Text
+								style={{
 									color: "white",
 									paddingLeft: 8,
-									flexDirection: "row",
 									marginBottom: 4,
-									marginTop: 8,
+									fontSize: 10,
 								}}>
-								<Text style={{fontSize: 20, fontWeight: "bold"}}> 
-									{item.name}
-								</Text>
-								<Text style={{fontSize: 10}}>
-									{"  "}{item.category}
-								</Text>
+								{item.category}
 							</Text>
 							<View style={{flexDirection: "row"}}>
 								<View
@@ -351,32 +351,42 @@ const Main = ({navigation}) => {
 							<View
 								style={{
 									flexDirection: "row",
-									marginBottom: 16,
+									marginLeft: 10,
+									marginTop: 10,
+									flexWrap: "wrap",
 								}}>
-								<View style={{marginLeft: 6, marginTop: 6}}>
-									<Text
+								<Text
 									style={{
 										fontWeight: "bold",
+										marginRight: 37,
 										color: "white",
+										flex: 0,
 									}}>
 									Local:
-									</Text>
-									<Text
+								</Text>
+								<Text style={{flex: 1, color: "white"}}>
+									{item.place}
+								</Text>
+							</View>
+							<View
+								style={{
+									flexDirection: "row",
+									marginBottom: 12,
+									marginLeft: 10,
+									flexWrap: "wrap",
+								}}>
+								<Text
 									style={{
 										fontWeight: "bold",
+										marginRight: 8,
 										color: "white",
+										flex: 0,
 									}}>
 									Descrição:
-									</Text>
-								</View>
-								<View style={{marginTop: 6, marginLeft: 10}}>
-									<Text style={{color: "white"}}>
-										{item.place}
-									</Text>
-									<Text style={{color: "white"}}>
-										{item.description}
-									</Text>
-								</View>
+								</Text>
+								<Text style={{flex: 1, color: "white"}}>
+									{item.description}
+								</Text>
 							</View>
 						</View>
 					</TouchableOpacity>

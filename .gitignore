@@ -1,15 +1,14 @@
-dist/
-.expo/
-web-build/
 node_modules/
-
-*.p8
-*.key
-*.p12
-*.jks
-*.orig.*
+.expo/
+dist/
 npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
 *.mobileprovision
+*.orig.*
+web-build/
 
 # macOS
 .DS_Store
