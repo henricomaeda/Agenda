@@ -399,11 +399,11 @@ const Form = ({navigation}) => {
 					textStyle={{color: "black"}}
 					dropDownContainerStyle={styles.input}
 					placeholder="Entre com uma categoria"
-          nestedScrollEnabled={true}
+					nestedScrollEnabled={true}
 					open={cmbOpen}
 					value={category}
 					items={cmbItems}
-          listMode="SCROLLVIEW"
+					listMode="SCROLLVIEW"
 					setOpen={setCmbOpen}
 					setValue={setCategory}
 					setItems={setCmbItems}

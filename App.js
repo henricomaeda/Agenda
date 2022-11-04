@@ -87,7 +87,10 @@ const App=() => {
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={{marginRight: 20}}
-								onPress={() => navigation.navigate("Form")}>
+								onPress={() => {
+									global.id = -1;
+									navigation.navigate("Form");
+								}}>
 								<Icon name="playlist-add" color="white" />
 							</TouchableOpacity>
 						</View>

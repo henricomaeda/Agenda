@@ -229,7 +229,7 @@ const Main = ({navigation}) => {
 		}
 		
 		if (data.length <= 0) return (
-			<Text style={{fontSize: 16, marginBottom: 10, marginLeft: 20, color: "#6aa374"}}>
+			<Text style={{fontSize: 14.6, marginBottom: 10, marginLeft: 20, color: "#6aa374"}}>
 				Não há eventos ou lembretes
 				{
 					data == today ? " para hoje."
@@ -511,7 +511,10 @@ const Main = ({navigation}) => {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.button}
-					onPress={() => navigation.navigate("Form")}>
+					onPress={() => {
+						global.id = -1;
+						navigation.navigate("Form");
+					}}>
 					<Text style={styles.buttonText}> Adicionar evento </Text>
 				</TouchableOpacity>
 			</View>
