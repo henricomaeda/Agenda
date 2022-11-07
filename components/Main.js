@@ -1,6 +1,5 @@
 import {StackActions} from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import {Notification} from "../Notification";
 import {useState, useEffect} from "react";
 import {
 	Text,
@@ -55,8 +54,8 @@ const Main = ({navigation}) => {
 		var year = tempDate.getFullYear();
 		
 		if (tomorrow) day++;
-		if (day < 10) day = '0' + day;
-		if (month < 10) month = '0' + month;
+		if (day < 10) day = "0" + day;
+		if (month < 10) month = "0" + month;
 		
 		return new Date(year, month, day);
 	}
@@ -135,12 +134,12 @@ const Main = ({navigation}) => {
 					var hours = tempDate.getHours();
 					var minutes = tempDate.getMinutes();
 					
-					if (day < 10) day = '0' + day;
-					if (month < 10) month = '0' + month;
-					if (hours < 10) hours = '0' + hours;
-					if (minutes < 10) minutes = '0' + minutes;
+					if (day < 10) day = "0" + day;
+					if (month < 10) month = "0" + month;
+					if (hours < 10) hours = "0" + hours;
+					if (minutes < 10) minutes = "0" + minutes;
 					
-					return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ":00-03:00";
+					return year + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":00-03:00";
 				}
 				else {
 					if (new Date().getTime() > tempDate.getTime()) return true;
@@ -174,12 +173,12 @@ const Main = ({navigation}) => {
 		var h = tempDate.getHours();
 		var min = tempDate.getMinutes();
 		
-		if (d < 10) d = '0' + d;
-		if (h < 10) h = '0' + h;
-		if (min < 10) min = '0' + min;
+		if (d < 10) d = "0" + d;
+		if (h < 10) h = "0" + h;
+		if (min < 10) min = "0" + min;
 		
-		const formatedDate = d + '/' + m + '/' + y;
-		const formatedTime = h + ':' + min;
+		const formatedDate = d + "/" + m + "/" + y;
+		const formatedTime = h + ":" + min;
 		
 		if (mode == "date") return formatedDate;
 		else if (mode == "time") return formatedTime;

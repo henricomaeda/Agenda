@@ -1,8 +1,8 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DropDownPicker from "react-native-dropdown-picker";
 import {StackActions} from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
-import {useState, useEffect} from 'react';
+import * as SecureStore from "expo-secure-store";
+import {useState, useEffect} from "react";
 import "../Globals";
 import {
 	Text,
@@ -14,7 +14,7 @@ import {
 	StyleSheet,
 	ScrollView,
 	TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
 const Form = ({navigation}) => {
 	// Definindo variáveis de dados do formulário.
@@ -78,25 +78,25 @@ const Form = ({navigation}) => {
 	
 	const dtpInitialChange = (event, selectedDate) => {
 		setDtpInitialShow(false);
-		if (dtpMode == 'time') {
+		if (dtpMode == "time") {
 			var day = dtpInitialDate.getDate();
 			var month = dtpInitialDate.getMonth() + 1;
 			var year = dtpInitialDate.getFullYear();
 			var hours = selectedDate.getHours();
 			var minutes = selectedDate.getMinutes();
 			
-			if (day < 10) day = '0' + day;
-			if (month < 10) month = '0' + month;
-			if (hours < 10) hours = '0' + hours;
-			if (minutes < 10) minutes = '0' + minutes;
+			if (day < 10) day = "0" + day;
+			if (month < 10) month = "0" + month;
+			if (hours < 10) hours = "0" + hours;
+			if (minutes < 10) minutes = "0" + minutes;
 			
-			const tempDate = new Date(year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ":00-03:00");
+			const tempDate = new Date(year + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":00-03:00");
 			setDtpInitialDate(tempDate);
-			setInitialTime(hours + ':' + minutes);
+			setInitialTime(hours + ":" + minutes);
 			
 			if (tempDate >= dtpFinalDate) {
 				setDtpFinalDate(tempDate);
-				setFinalTime(hours + ':' + minutes);
+				setFinalTime(hours + ":" + minutes);
 			}
 		}
 		else {
@@ -108,40 +108,40 @@ const Form = ({navigation}) => {
 			var finalMinutes = dtpFinalDate.getMinutes();
 			var finalHours = dtpFinalDate.getHours();
 			
-			if (day < 10) day = '0' + day;
-			if (month < 10) month = '0' + month;
-			if (initialHours < 10) initialHours = '0' + initialHours;
-			if (initialMinutes < 10) initialMinutes = '0' + initialMinutes;
-			if (finalMinutes < 10) finalMinutes = '0' + finalMinutes;
-			if (finalHours < 10) finalHours = '0' + finalHours;
+			if (day < 10) day = "0" + day;
+			if (month < 10) month = "0" + month;
+			if (initialHours < 10) initialHours = "0" + initialHours;
+			if (initialMinutes < 10) initialMinutes = "0" + initialMinutes;
+			if (finalMinutes < 10) finalMinutes = "0" + finalMinutes;
+			if (finalHours < 10) finalHours = "0" + finalHours;
 			
-			let tempDate = year + '-' + month + '-' + day + 'T' + initialHours + ':' + initialMinutes + ":00-03:00";
+			let tempDate = year + "-" + month + "-" + day + "T" + initialHours + ":" + initialMinutes + ":00-03:00";
 			setDtpInitialDate(new Date(tempDate));
 			
-			tempDate = year + '-' + month + '-' + day + 'T' + finalHours + ':' + finalMinutes + ":00-03:00";
+			tempDate = year + "-" + month + "-" + day + "T" + finalHours + ":" + finalMinutes + ":00-03:00";
 			setDtpFinalDate(new Date(tempDate));
-			setDate(day + '/' + months[month - 1] + '/' + year);
+			setDate(day + "/" + months[month - 1] + "/" + year);
 		}
 	};
 	
 	const dtpFinalChange = (event, selectedDate) => {
 		setDtpFinalShow(false);
-		if (dtpMode == 'time') {
+		if (dtpMode == "time") {
 			var day = dtpFinalDate.getDate();
 			var month = dtpFinalDate.getMonth() + 1;
 			var year = dtpFinalDate.getFullYear();
 			var hours = selectedDate.getHours();
 			var minutes = selectedDate.getMinutes();
 			
-			if (day < 10) day = '0' + day;
-			if (month < 10) month = '0' + month;
-			if (hours < 10) hours = '0' + hours;
-			if (minutes < 10) minutes = '0' + minutes;
+			if (day < 10) day = "0" + day;
+			if (month < 10) month = "0" + month;
+			if (hours < 10) hours = "0" + hours;
+			if (minutes < 10) minutes = "0" + minutes;
 			
-			const tempDate = new Date(year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ":00-03:00");
+			const tempDate = new Date(year + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":00-03:00");
 			if (tempDate >= dtpInitialDate) {
 				setDtpFinalDate(tempDate);
-				setFinalTime(hours + ':' + minutes);
+				setFinalTime(hours + ":" + minutes);
 			}
 			else {
 				setDtpFinalDate(dtpInitialDate);
@@ -149,10 +149,10 @@ const Form = ({navigation}) => {
 				hours = dtpInitialDate.getHours();
 				minutes = dtpInitialDate.getMinutes();
 				
-				if (hours < 10) hours = '0' + hours;
-				if (minutes < 10) minutes = '0' + minutes;
+				if (hours < 10) hours = "0" + hours;
+				if (minutes < 10) minutes = "0" + minutes;
 				
-				setFinalTime(hours + ':' + minutes);
+				setFinalTime(hours + ":" + minutes);
 			}
 		}
 	};
@@ -160,9 +160,9 @@ const Form = ({navigation}) => {
 	const reset = async (resetting = true) => {
 		setCmbOpen(false);
 		if (resetting) {
-			setName('');
-			setPlace('');
-			setDescription('');
+			setName("");
+			setPlace("");
+			setDescription("");
 			setCategory("Lembrete");
 			
 			const tempDate = new Date();
@@ -177,14 +177,14 @@ const Form = ({navigation}) => {
 			var hours = tempDate.getHours();
 			var minutes = tempDate.getMinutes();
 			
-			if (day < 10) day = '0' + day;
-			if (month < 10) month = '0' + month;
-			if (hours < 10) hours = '0' + hours;
-			if (minutes < 10) minutes = '0' + minutes;
+			if (day < 10) day = "0" + day;
+			if (month < 10) month = "0" + month;
+			if (hours < 10) hours = "0" + hours;
+			if (minutes < 10) minutes = "0" + minutes;
 			
-			setDate(day + '/' + months[month - 1] + '/' + year);
-			setInitialTime(hours + ':' + minutes);
-			setFinalTime(hours + ':' + minutes);
+			setDate(day + "/" + months[month - 1] + "/" + year);
+			setInitialTime(hours + ":" + minutes);
+			setFinalTime(hours + ":" + minutes);
 		}
 		else {
 			// Criando objeto de dados.
@@ -213,13 +213,13 @@ const Form = ({navigation}) => {
 					var hours = tempDate.getHours();
 					var minutes = tempDate.getMinutes();
 					
-					if (day < 10) day = '0' + day;
-					if (month < 10) month = '0' + month;
-					if (hours < 10) hours = '0' + hours;
-					if (minutes < 10) minutes = '0' + minutes;
+					if (day < 10) day = "0" + day;
+					if (month < 10) month = "0" + month;
+					if (hours < 10) hours = "0" + hours;
+					if (minutes < 10) minutes = "0" + minutes;
 					
-					setDate(day + '/' + months[month - 1] + '/' + year);
-					setInitialTime(hours + ':' + minutes);
+					setDate(day + "/" + months[month - 1] + "/" + year);
+					setInitialTime(hours + ":" + minutes);
 
 					tempDate = new Date(item.finalDate);
 					setDtpFinalDate(tempDate);
@@ -230,12 +230,12 @@ const Form = ({navigation}) => {
 					hours = tempDate.getHours();
 					minutes = tempDate.getMinutes();
 					
-					if (day < 10) day = '0' + day;
-					if (month < 10) month = '0' + month;
-					if (hours < 10) hours = '0' + hours;
-					if (minutes < 10) minutes = '0' + minutes;
+					if (day < 10) day = "0" + day;
+					if (month < 10) month = "0" + month;
+					if (hours < 10) hours = "0" + hours;
+					if (minutes < 10) minutes = "0" + minutes;
 
-					setFinalTime(hours + ':' + minutes);
+					setFinalTime(hours + ":" + minutes);
 				}
 			})
 		}
@@ -410,7 +410,7 @@ const Form = ({navigation}) => {
 				/>
 				<Text> Descrição </Text>
 				<TextInput
-					style={[styles.input, {textAlignVertical: 'top'}]}
+					style={[styles.input, {textAlignVertical: "top"}]}
 					multiline={true}
 					numberOfLines={6}
 					placeholder="Entre com a descrição do evento"
@@ -433,10 +433,10 @@ const Form = ({navigation}) => {
 								var month = dtpInitialDate.getMonth() + 1;
 								var year = dtpInitialDate.getFullYear();
 								
-								if (day < 10) day = '0' + day;
-								if (month < 10) month = '0' + month;
+								if (day < 10) day = "0" + day;
+								if (month < 10) month = "0" + month;
 								
-								let tempDate = new Date(year + '-' + month + '-' + day + "T00:00:00-03:00");
+								let tempDate = new Date(year + "-" + month + "-" + day + "T00:00:00-03:00");
 								setDtpInitialDate(tempDate);
 								setInitialTime("00:00");
 								
@@ -444,10 +444,10 @@ const Form = ({navigation}) => {
 								month = dtpFinalDate.getMonth() + 1;
 								year = dtpFinalDate.getFullYear();
 								
-								if (day < 10) day = '0' + day;
-								if (month < 10) month = '0' + month;
+								if (day < 10) day = "0" + day;
+								if (month < 10) month = "0" + month;
 								
-								tempDate = new Date(year + '-' + month + '-' + day + "T23:59:00-03:00");
+								tempDate = new Date(year + "-" + month + "-" + day + "T23:59:00-03:00");
 								setDtpFinalDate(tempDate);
 								setFinalTime("23:59");
 							}
@@ -569,9 +569,12 @@ const styles = StyleSheet.create({
 	
 	button: {
 		padding: 10,
+		marginTop: 6,
 		borderRadius: 10,
 		marginBottom: 10,
 		alignItems: "center",
+    justifyContent: "center",
+		height: Dimensions.get("window").width / 8.2,
 		backgroundColor: global.headerBackgroundColor,
 		width: (Dimensions.get("window").width / 3) - 24,
 	},
@@ -579,5 +582,6 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: "white",
 		fontWeight: "bold",
+    fontSize: (Dimensions.get("window").width / 3) / 7.6,
 	},
 });

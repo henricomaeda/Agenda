@@ -1,5 +1,5 @@
 # Agenda
-> Sistema de agendamento de datas personalizada para dispositivos Mobile.
+> Sistema de agendamento de eventos personalizados para dispositivos Mobile.
 
 ## Orientações para a instalação
 

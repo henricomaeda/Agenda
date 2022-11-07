@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@react-native-community/clipboard": "*",
     "@react-native-community/datetimepicker": "6.2.0",
     "@react-navigation/native": "*",
     "@react-navigation/stack": "*",
@@ -22,6 +23,7 @@
     "expo-server-sdk": "*",
     "expo-status-bar": "~1.4.0",
     "expo-task-manager": "~10.3.0",
+    "js-base64": "*",
     "moment": "*",
     "react": "18.0.0",
     "react-native": "0.69.6",
