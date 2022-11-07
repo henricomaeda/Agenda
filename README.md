@@ -1,5 +1,5 @@
-# Calendar Mobile
-> Sistema de calendário com agendamento de datas para dispositivos Mobile.
+# Agenda
+> Sistema de agendamento de datas personalizada para dispositivos Mobile.
 
 ## Orientações para a instalação
 
@@ -9,7 +9,7 @@ Para a instalação do sistema, consulte o diretório:
 
 Logo em seguida, baixar o arquivo nomeado como:
 	
-	Calendar.apk
+	Agenda.apk
 
 Posteriormente, instalar o aplicativo (no celular).
 
