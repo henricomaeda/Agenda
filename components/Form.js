@@ -1,13 +1,14 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import {StackActions} from "@react-navigation/native";
+import {useState, useEffect, useRef} from "react";
 import * as SecureStore from "expo-secure-store";
-import {useState, useEffect} from "react";
 import "../Globals";
 import {
 	Text,
 	View,
 	Alert,
+	Image,
 	Switch,
 	TextInput,
 	Dimensions,
@@ -28,6 +29,7 @@ const Form = ({navigation}) => {
 	const [allDay, setAllDay] = useState(false);
 	const [annually, setAnnually] = useState(false);
 	const [required, setRequired] = useState(false);
+	const scrollRef = useRef();
 	
 	// Definindo variáveis de caixa combo.
 	const [cmbOpen, setCmbOpen]=useState(false);
@@ -39,6 +41,7 @@ const Form = ({navigation}) => {
 		{label: "Acadêmico", value: "Acadêmico"},
 		{label: "Relacionamento", value: "Relacionamento"},
 		{label: "Medicina", value: "Medicina"},
+		{label: "Religião", value: "Religião"},
 	]);
 	
 	// Definindo variável de meses.
@@ -243,7 +246,10 @@ const Form = ({navigation}) => {
 	
 	const create = async (creating = true) => {
 		setCmbOpen(false);
-		if (name.trim().length == 0) setRequired(true);
+		if (name.trim().length == 0) {
+			setRequired(true);
+			scrollRef.current?.scrollTo({y: 0, animated: true});
+		}
 		else {
 			// Criando objeto de dados.
 			let temporaryEvents = [];
@@ -319,230 +325,316 @@ const Form = ({navigation}) => {
 	};
 	
 	return (
-		<ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: "center"}}>
-			<View style={{margin: 30}}>
-				<Text> Nome do evento ou lembrete </Text>
-				<TextInput
-					style={styles.input}
-					placeholder="Entre com o nome do evento"
-					onChangeText={(text) => setName(text)}
-					maxLength={30}
-					value={name}
-				/>
-				{required ? (
-					<Text
+		<View style={{flex: 1}}>
+			<ScrollView ref={scrollRef} contentContainerStyle={{flexGrow: 1, justifyContent: "center"}}>
+				<View style={{margin: 20, alignItems: "center"}}>
+					<View>
+						<Text> Nome do evento ou lembrete </Text>
+						<TextInput
+							style={styles.input}
+							placeholder="Entre com o nome do evento"
+							onChangeText={(text) => setName(text)}
+							maxLength={30}
+							value={name}
+						/>
+						{required ? (
+							<Text
+								style={{
+									marginBottom: 10,
+									marginTop: -8,
+									marginLeft: 6,
+									color: "red",
+								}}>
+								Campo obrigatório.
+							</Text>
+						) : null}
+						<View>
+							<Text> Endereço ou localidade </Text>
+						</View>
+						<TextInput
+							style={styles.input}
+							placeholder="Entre com o endereço do evento"
+							onChangeText={(text) => setPlace(text)}
+							value={place}
+						/>
+					</View>
+					<View style={{flexDirection: "row"}}>
+						<View>
+							<Text> Data do evento </Text>
+							<TouchableOpacity
+								style={[
+									styles.input,
+									{
+										width: (Dimensions.get("window").width / 2) / 1.2,
+										alignItems: "center",
+									}
+								]}
+								onPress={() => showMode(true, "date")}>
+								<Text style={{fontSize: ((Dimensions.get("window").width / 2) / 2) / 6}}> {date} </Text>
+							</TouchableOpacity>
+						</View>
+						<View>
+							<Text style={{marginLeft: 6}}> Início </Text>
+							<TouchableOpacity
+								style={[
+									styles.input,
+									{
+										marginLeft: 6,
+										width: ((Dimensions.get("window").width / 2) / 2) / 1.2,
+										alignItems: "center",
+									},
+								]}
+								onPress={() => !allDay && showMode(true, "time")}>
+								<Text style={{fontSize: ((Dimensions.get("window").width / 2) / 2) / 6}}> {initialTime} </Text>
+							</TouchableOpacity>
+						</View>
+						<View>
+							<Text style={{marginLeft: 6, }}> Término </Text>
+							<TouchableOpacity
+								style={[
+									styles.input,
+									{
+										marginLeft: 6,
+										width: ((Dimensions.get("window").width / 2) / 2) / 1.2,
+										alignItems: "center",
+									},
+								]}
+								onPress={() => !allDay && showMode(false, "time")}>
+								<Text style={{fontSize: ((Dimensions.get("window").width / 2) / 2) / 6}}> {finalTime} </Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View
 						style={{
-							marginBottom: 10,
-							marginTop: -8,
-							marginLeft: 6,
-							color: "red",
+							flexDirection: "row",
+							width: Dimensions.get("window").width / 1.15,
 						}}>
-						Campo obrigatório.
-					</Text>
-				) : null}
-				<Text> Endereço ou localidade </Text>
-				<TextInput
-					style={styles.input}
-					placeholder="Entre com o endereço do evento"
-					onChangeText={(text) => setPlace(text)}
-					value={place}
-				/>
-				<View style={{flexDirection: "row"}}>
+						<View style={styles.buttonSwitch}>
+							<Switch
+								thumbColor={global.toggleColor}
+								trackColor={{
+									false: global.offSwitchBackground,
+									true: global.onSwitchBackground,
+								}}
+								onValueChange={() => {
+									setAnnually(!annually);
+									setCmbOpen(false);
+								}}
+								style={[
+									styles.switch,
+									!annually && {marginLeft: 10}
+								]}
+								value={annually}
+							/>
+							<Text style={!annually && {marginLeft: -10}}> Anualmente </Text>
+						</View>
+						<View style={styles.buttonSwitch}>
+							<Switch
+								thumbColor={global.toggleColor}
+								trackColor={{
+									false: global.offSwitchBackground,
+									true: global.onSwitchBackground,
+								}}
+								onValueChange={() => {
+									setAllDay(!allDay);
+									setCmbOpen(false);
+									
+									if (!allDay) {
+										var day = dtpInitialDate.getDate();
+										var month = dtpInitialDate.getMonth() + 1;
+										var year = dtpInitialDate.getFullYear();
+										
+										if (day < 10) day = "0" + day;
+										if (month < 10) month = "0" + month;
+										
+										let tempDate = new Date(year + "-" + month + "-" + day + "T00:00:00-03:00");
+										setDtpInitialDate(tempDate);
+										setInitialTime("00:00");
+										
+										day = dtpFinalDate.getDate();
+										month = dtpFinalDate.getMonth() + 1;
+										year = dtpFinalDate.getFullYear();
+										
+										if (day < 10) day = "0" + day;
+										if (month < 10) month = "0" + month;
+										
+										tempDate = new Date(year + "-" + month + "-" + day + "T23:59:00-03:00");
+										setDtpFinalDate(tempDate);
+										setFinalTime("23:59");
+									}
+								}}
+								style={[
+									styles.switch,
+									!allDay && {marginLeft: 10}
+								]}
+								value={allDay}
+							/>
+							<Text style={!allDay && {marginLeft: -10}}> Dia inteiro </Text>
+						</View>
+					</View>
 					<View>
-						<Text> Data do evento </Text>
+						<Text> Categoria </Text>
+						<DropDownPicker
+							style={[styles.input, {zIndex: 2000}]}
+							textStyle={{color: "black"}}
+							dropDownContainerStyle={styles.input}
+							placeholder="Entre com uma categoria"
+							nestedScrollEnabled={true}
+							open={cmbOpen}
+							value={category}
+							items={cmbItems}
+							listMode="SCROLLVIEW"
+							setOpen={setCmbOpen}
+							setValue={setCategory}
+							setItems={setCmbItems}
+						/>
+					</View>
+					<View
+						style={{
+							marginBottom: 12.6,
+							alignSelf: "center",
+							flexDirection: "row",
+						}}>
 						<TouchableOpacity
-							style={[
-								styles.input,
-								{
-									width: ((Dimensions.get("window").width / 3) + 50) - 2,
-									alignItems: "center",
-								}
-							]}
-							onPress={() => showMode(true, "date")}>
-							<Text> {date} </Text>
+							style={[styles.suggestion, {backgroundColor: "#9194cc"}]}
+							onPress={() => setCategory("Aniversário")}>
+							<Text style={styles.suggestionText}> ANIVERSÁRIO </Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.suggestion, {backgroundColor: "#a997d1"}]}
+							onPress={() => setCategory("Relacionamento")}>
+							<Text style={styles.suggestionText}> NAMORO </Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.suggestion, {backgroundColor: "#d6af9a"}]}
+							onPress={() => setCategory("Acadêmico")}>
+							<Text style={styles.suggestionText}> ESCOLA </Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.suggestion, {backgroundColor: "#e3a1ac"}]}
+							onPress={() => setCategory("Trabalho")}>
+							<Text style={styles.suggestionText}> TRABALHO </Text>
 						</TouchableOpacity>
 					</View>
 					<View>
-						<Text style={{marginLeft: 6}}> Início </Text>
-						<TouchableOpacity
-							style={[
-								styles.input,
-								{
-									marginLeft: 6,
-									width: (Dimensions.get("window").width / 3) - 60,
-									alignItems: "center",
-								},
-							]}
-							onPress={() => !allDay && showMode(true, "time")}>
-							<Text> {initialTime} </Text>
-						</TouchableOpacity>
+						<Text> Descrição </Text>
+						<TextInput
+							style={[styles.input, {textAlignVertical: "top"}]}
+							multiline={true}
+							numberOfLines={6}
+							placeholder="Entre com a descrição do evento"
+							onChangeText={(text) => setDescription(text)}
+							value={description}
+						/>
 					</View>
-					<View>
-						<Text style={{marginLeft: 6}}> Término </Text>
-						<TouchableOpacity
-							style={[
-								styles.input,
-								{
-									marginLeft: 6,
-									width: (Dimensions.get("window").width / 3) - 60,
-									alignItems: "center",
-								},
-							]}
-							onPress={() => !allDay && showMode(false, "time")}>
-							<Text> {finalTime} </Text>
-						</TouchableOpacity>
-					</View>
-				</View>
-				<Text> Categoria </Text>
-				<DropDownPicker
-					style={[styles.input, {zIndex: 2000}]}
-					textStyle={{color: "black"}}
-					dropDownContainerStyle={styles.input}
-					placeholder="Entre com uma categoria"
-					nestedScrollEnabled={true}
-					open={cmbOpen}
-					value={category}
-					items={cmbItems}
-					listMode="SCROLLVIEW"
-					setOpen={setCmbOpen}
-					setValue={setCategory}
-					setItems={setCmbItems}
-				/>
-				<Text> Descrição </Text>
-				<TextInput
-					style={[styles.input, {textAlignVertical: "top"}]}
-					multiline={true}
-					numberOfLines={6}
-					placeholder="Entre com a descrição do evento"
-					onChangeText={(text) => setDescription(text)}
-					value={description}
-				/>
-				<View style={styles.buttonSwitch}>
-					<Switch
-						thumbColor={global.toggleColor}
-						trackColor={{
-							false: global.offSwitchBackground,
-							true: global.onSwitchBackground,
-						}}
-						onValueChange={() => {
-							setAllDay(!allDay);
-							setCmbOpen(false);
-							
-							if (!allDay) {
-								var day = dtpInitialDate.getDate();
-								var month = dtpInitialDate.getMonth() + 1;
-								var year = dtpInitialDate.getFullYear();
-								
-								if (day < 10) day = "0" + day;
-								if (month < 10) month = "0" + month;
-								
-								let tempDate = new Date(year + "-" + month + "-" + day + "T00:00:00-03:00");
-								setDtpInitialDate(tempDate);
-								setInitialTime("00:00");
-								
-								day = dtpFinalDate.getDate();
-								month = dtpFinalDate.getMonth() + 1;
-								year = dtpFinalDate.getFullYear();
-								
-								if (day < 10) day = "0" + day;
-								if (month < 10) month = "0" + month;
-								
-								tempDate = new Date(year + "-" + month + "-" + day + "T23:59:00-03:00");
-								setDtpFinalDate(tempDate);
-								setFinalTime("23:59");
-							}
-						}}
-						style={styles.switch}
-						value={allDay}
-					/>
-					<Text> Dia inteiro </Text>
-				</View>
-				<View style={styles.buttonSwitch}>
-					<Switch
-						thumbColor={global.toggleColor}
-						trackColor={{
-							false: global.offSwitchBackground,
-							true: global.onSwitchBackground,
-						}}
-						onValueChange={() => {
-							setAnnually(!annually);
-							setCmbOpen(false);
-						}}
-						style={styles.switch}
-						value={annually}
-					/>
-					<Text> Repetir anualmente </Text>
-				</View>
-				<View style={{flexDirection: "row"}}>
-					<TouchableOpacity
-						style={[
-							styles.button,
-							{
-								marginRight: 6,
-								backgroundColor: "#646085",
-							},
-						]}
-						onPress={() => navigation.dispatch(StackActions.replace("Main"))}>
-						<Text style={styles.buttonText}> Retornar </Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[
-							styles.button,
-							{
-								marginRight: 6,
-								backgroundColor: "#53506e",
-							},
-						]}
-						onPress={() => reset()}>
-						<Text style={styles.buttonText}> Resetar </Text>
-					</TouchableOpacity>
-					{global.id == -1 ? (
-						<TouchableOpacity
-							style={styles.button}
-							onPress={() => create()}>
-							<Text style={styles.buttonText}>
-								Adicionar
-							</Text>
-						</TouchableOpacity>
-					) : (
-						<TouchableOpacity
-							style={styles.button}
-							onPress={() => create(false)}>
-							<Text style={styles.buttonText}>
-								Atualizar
-							</Text>
-						</TouchableOpacity>
+					{dtpInitialShow && (
+						<DateTimePicker
+							testID="dateTimePicker"
+							value={dtpInitialDate}
+							mode={dtpMode}
+							is24Hour={true}
+							display="default"
+							onChange={dtpInitialChange}
+						/>
+					)}
+					{dtpFinalShow && (
+						<DateTimePicker
+							testID="dateTimePicker"
+							value={dtpFinalDate}
+							mode={dtpMode}
+							is24Hour={true}
+							display="default"
+							onChange={dtpFinalChange}
+						/>
 					)}
 				</View>
-				{dtpInitialShow && (
-					<DateTimePicker
-						testID="dateTimePicker"
-						value={dtpInitialDate}
-						mode={dtpMode}
-						is24Hour={true}
-						display="default"
-						onChange={dtpInitialChange}
-					/>
-				)}
-				{dtpFinalShow && (
-					<DateTimePicker
-						testID="dateTimePicker"
-						value={dtpFinalDate}
-						mode={dtpMode}
-						is24Hour={true}
-						display="default"
-						onChange={dtpFinalChange}
-					/>
+			</ScrollView>
+			<View style={styles.buttons}>
+				{global.id == -1 ? (
+					<TouchableOpacity onPress={() => create()}>
+						<Image
+							style={styles.buttonImage}
+							source={require("../assets/icons/Add.png")}
+						/>
+					</TouchableOpacity>
+				) : (
+					<View>
+						<TouchableOpacity
+							onPress={() => {
+								Alert.alert(
+									"Você deseja mesmo remover?",
+									"Os dados do evento serão removidos.",
+									[
+										{text: "Cancelar"},
+										{
+											// Removendo os dados do evento.
+											text: "Remover",
+											onPress: async () => {
+												const response = await SecureStore.getItemAsync("events");
+												if (response) temporaryEvents = JSON.parse(response);
+												
+												let eventName = "Calendar ©";
+												temporaryEvents.map((item) => {
+													if (item.id == global.id) {
+														eventName = item.name;
+													}
+												});
+												
+												temporaryEvents=temporaryEvents.filter((itens) => itens.id != global.id).map(
+													({
+														id,
+														name,
+														place,
+														initialDate,
+														finalDate,
+														category,
+														description,
+														allDay,
+														annually,
+													}) => ({
+														id,
+														name,
+														place,
+														initialDate,
+														finalDate,
+														category,
+														description,
+														allDay,
+														annually,
+													})
+												)
+												
+												if (temporaryEvents.length > 0) SecureStore.setItemAsync("events", JSON.stringify(temporaryEvents));
+												else SecureStore.setItemAsync("events", "");
+												
+												Alert.alert(eventName, "Os dados do evento foram removidos!");
+												navigation.dispatch(StackActions.replace("Main"));
+											},
+										},
+									]
+								);
+							}}>
+							<Image
+								style={styles.buttonImage}
+								source={require("../assets/icons/Trashcan.png")}
+							/>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => create(false)}>
+							<Image
+								style={styles.buttonImage}
+								source={require("../assets/icons/Update.png")}
+							/>
+						</TouchableOpacity>
+					</View>
 				)}
 			</View>
-		</ScrollView>
+		</View>
 	);
 };
 
 export default Form;
 const styles = StyleSheet.create({
 	input: {
-		width: Dimensions.get("window").width - 60,
 		padding: 6,
 		color: "gray",
 		borderWidth: 2,
@@ -550,12 +642,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		backgroundColor: "white",
 		borderColor: global.headerBackgroundColor,
-	},
-	
-	buttonSwitch: {
-		flexDirection: "row",
-		marginLeft: 6,
-		marginTop: 6,
+		width: Dimensions.get("window").width / 1.15,
 	},
 	
 	switch: {
@@ -567,21 +654,36 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	
-	button: {
-		padding: 10,
+	buttonSwitch: {
+		justifyContent: "center",
+		flexDirection: "row",
 		marginTop: 6,
-		borderRadius: 10,
-		marginBottom: 10,
-		alignItems: "center",
-    justifyContent: "center",
-		height: Dimensions.get("window").width / 8.2,
-		backgroundColor: global.headerBackgroundColor,
-		width: (Dimensions.get("window").width / 3) - 24,
+		flex: 1,
 	},
 	
-	buttonText: {
+	suggestion: {
+		marginRight: (Dimensions.get("window").width / 2.5) / 40,
+		marginLeft: (Dimensions.get("window").width / 2.5) / 40,
+		padding: (Dimensions.get("window").width / 2.5) / 20,
+		alignItems: "center",
+		borderRadius: 14.26,
+	},
+	
+	suggestionText: {
 		color: "white",
-		fontWeight: "bold",
-    fontSize: (Dimensions.get("window").width / 3) / 7.6,
+		fontSize: (Dimensions.get("window").width / 2.5) / 13.2,
+	},
+	
+	buttons: {
+		flex: 0,
+		right: 10,
+		bottom: 10,
+		position: "absolute",
+	},
+	
+	buttonImage: {
+		height: Dimensions.get("window").width / 8.2,
+		width: Dimensions.get("window").width / 8.2,
+		marginTop: 12,
 	},
 });

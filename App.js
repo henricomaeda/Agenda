@@ -2,7 +2,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 import {NavigationContainer} from "@react-navigation/native";
 import {StackActions} from "@react-navigation/native";
 import Information from "./components/Information";
-import * as SecureStore from "expo-secure-store";
 import {Icon} from "react-native-elements";
 import Backup from "./components/Backup";
 import Form from "./components/Form";
@@ -72,13 +71,13 @@ const App=() => {
 					headerTitleStyle: {fontWeight: "bold"},
 					headerLeft: () => route.name == "Main" ? (
 						<TouchableOpacity
-							style={{marginLeft: 12}}
+							style={{marginLeft: 20}}
 							onPress={() => navigation.navigate("Backup")}>
 							<Icon name="backup" color="white" />
 						</TouchableOpacity>
 					) : (
 						<TouchableOpacity
-							style={{marginLeft: 12}}
+							style={{marginLeft: 20}}
 							onPress={() => {
 								navigation.popToTop();
 								navigation.dispatch(StackActions.replace("Main"));
@@ -107,70 +106,11 @@ const App=() => {
 								<Icon name="playlist-add" color="white" />
 							</TouchableOpacity>
 						</View>
-					) : route.name == "Form" && global.id == -1 ? (
+					) : route.name == "Form" && (
 						<TouchableOpacity
 							style={{marginRight: 20}}
 							onPress={() => Alert.alert(today(false), today())}>
 							<Icon name="date-range" color="white" />
-						</TouchableOpacity>
-					) : (
-						<TouchableOpacity
-							style={{marginRight: 20}}
-							onPress={() => {
-								Alert.alert(
-									"Você deseja mesmo remover?",
-									"Os dados do evento serão removidos.",
-									[
-										{text: "Cancelar"},
-										{
-											// Removendo os dados do evento.
-											text: "Remover",
-											onPress: async () => {
-												const response = await SecureStore.getItemAsync("events");
-												if (response) temporaryEvents = JSON.parse(response);
-												
-												let eventName = "Calendar ©";
-												temporaryEvents.map((item) => {
-													if (item.id == global.id) {
-														eventName = item.name;
-													}
-												});
-												
-												temporaryEvents=temporaryEvents.filter((itens) => itens.id != global.id).map(
-													({
-														id,
-														name,
-														place,
-														initialDate,
-														finalDate,
-														category,
-														description,
-														allDay,
-														annually,
-													}) => ({
-														id,
-														name,
-														place,
-														initialDate,
-														finalDate,
-														category,
-														description,
-														allDay,
-														annually,
-													})
-												)
-												
-												if (temporaryEvents.length > 0) SecureStore.setItemAsync("events", JSON.stringify(temporaryEvents));
-												else SecureStore.setItemAsync("events", "");
-												
-												Alert.alert(eventName, "Os dados do evento foram removidos!");
-												navigation.dispatch(StackActions.replace("Main"));
-											},
-										},
-									]
-								);
-							}}>
-							<Icon name="delete" color="white" />
 						</TouchableOpacity>
 					)
 				})}>
@@ -183,7 +123,7 @@ const App=() => {
 					name="Backup"
 					component={Backup}
 					options={{
-						title: "Área de segurança",
+						title: "Área de dados e criptografia",
 						headerRight: null,
 					}}
 				/>

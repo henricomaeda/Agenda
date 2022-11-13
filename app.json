@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Agenda",
-    "slug": "agendamentos",
+    "slug": "agenda",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFFFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,12 +21,21 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.henricomaeda.agenda",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.henrico.maeda.agendamentos"
+      }
     },
+	"plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#FFFFFF"
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }

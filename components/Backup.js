@@ -21,7 +21,10 @@ const Backup = ({navigation}) => {
 	const [restore, setRestore] = useState(null);
 	
 	const getClipboard = async (acquire) => {
-		if (acquire) setRestore(await Clipboard.getString());
+		if (acquire) {
+			const copied = await Clipboard.getString();
+			setRestore(copied);
+		}
 		else Clipboard.setString(backup);
 	}
 	
@@ -37,7 +40,7 @@ const Backup = ({navigation}) => {
 	
 	const restoreData = () => {
 		const title = "Restauração";
-		if (restore == null || restore.trim().length <= 0) Alert.alert(title, "Necessário o código dos dados.");
+		if (restore == null || restore.trim().length <= 0) Alert.alert(title, "Necessário os dados criptografados.");
 		else if (restore == "Nenhum dado encontrado.") Alert.alert(title, "Nenhum dado encontrado.");
 		else if (restore == backup) Alert.alert(title, "Dados presentes no aplicativo.");
 		else {
@@ -68,7 +71,7 @@ const Backup = ({navigation}) => {
 			}
 			catch(exception) {
 				Alert.alert(title, "Dados corrompidos.");
-				console.log("ERRO: " + exception);
+				console.error("ERRO: " + exception);
 			}
 		}
 	}
@@ -87,10 +90,6 @@ const Backup = ({navigation}) => {
 	return (
 		<ScrollView contentContainerStyle={{flexGrow: 1}}>
 			<View style={{flex: 1, margin: 20, alignItems: "center", justifyContent: "center"}}>
-				<Image
-					style={styles.logo}
-					source={require("../assets/Logo.png")}
-				/>
 				<View style={styles.component}>
 					<Text style={{fontSize: Dimensions.get("window").width / 28}}> Dados criptografados. </Text>
 					<View style={{flexDirection: "row", justifyContent: "center"}}>
@@ -103,14 +102,14 @@ const Backup = ({navigation}) => {
 						<TouchableOpacity style={styles.copyAndPasteComponent} onPress={() => getClipboard(false)}>
 							<Image
 								style={styles.copyAndPasteImage}
-								source={require("../assets/Copy.png")}
+								source={require("../assets/backup/Copy.png")}
 							/>
 							<Text style={styles.copyAndPasteText}> COPIAR </Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 				<View style={styles.component}>
-					<Text style={{fontSize: Dimensions.get("window").width / 28}}> Restaurar com dados criptografados. </Text>
+					<Text style={{fontSize: Dimensions.get("window").width / 28}}> Cole os dados criptografados aqui. </Text>
 					<View style={{flexDirection: "row", justifyContent: "center"}}>
 						<TextInput
 							style={styles.input}
@@ -121,7 +120,7 @@ const Backup = ({navigation}) => {
 						<TouchableOpacity style={styles.copyAndPasteComponent} onPress={() => getClipboard(true)}>
 							<Image
 								style={styles.copyAndPasteImage}
-								source={require("../assets/Paste.png")}
+								source={require("../assets/backup/Paste.png")}
 							/>
 							<Text style={styles.copyAndPasteText}> COLAR </Text>
 						</TouchableOpacity>
@@ -141,7 +140,7 @@ const Backup = ({navigation}) => {
 					<View style={styles.restoreComponent}>
 						<Image
 							style={styles.restoreImage}
-							source={require("../assets/Restore.png")}
+							source={require("../assets/backup/Restore.png")}
 						/>
 						<Text style={styles.restoreText}> Restaurar com criptografia </Text>
 					</View>
@@ -151,12 +150,12 @@ const Backup = ({navigation}) => {
 						style={[
 							styles.restoreButton,
 							{marginRight: 10},
-            ]}
+						]}
 						onPress={() => Alert.alert("Restauração com arquivo", "Indisponível no momento.")}>
 						<View style={styles.restoreComponent}>
 							<Image
 								style={styles.restoreImage}
-								source={require("../assets/Restore.png")}
+								source={require("../assets/backup/Restore.png")}
 							/>
 							<Text style={styles.restoreText}> Restaurar </Text>
 						</View>
@@ -170,7 +169,7 @@ const Backup = ({navigation}) => {
 						<View style={styles.restoreComponent}>
 							<Image
 								style={styles.restoreImage}
-								source={require("../assets/Backup.png")}
+								source={require("../assets/backup/Backup.png")}
 							/>
 							<Text style={styles.restoreText}> Backup </Text>
 						</View>
@@ -183,13 +182,8 @@ const Backup = ({navigation}) => {
 
 export default Backup;
 const styles = StyleSheet.create({
-	logo: {
-		height: Dimensions.get("window").width / 2.6,
-		width: Dimensions.get("window").width / 2.6,
-		marginBottom: 20,
-	},
-	
-	component: {marginBottom: Dimensions.get("window").width / 40},
+  
+	component: {marginBottom: Dimensions.get("window").width / 20.2},
 	input: {
 		width: Dimensions.get("window").width / 1.6,
 		height: Dimensions.get("window").width / 4,

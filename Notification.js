@@ -2,29 +2,22 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import {Platform} from "react-native";
 
-Notifications.setNotificationHandler({
-	handleNotification: async () => ({
-		shouldShowAlert: true,
-		shouldPlaySound: true,
-		shouldSetBadge: false,
-	}),
-});
-
-export const Notification = (title, body) => {
-	// Chamando o construtor.
-	const constructor = () => {
-		defineSettings();
-		sendNotification();
-	}
-	
-	// Definindo as configurações e o token.
-	const defineSettings = async () => {
+const defineSettings = async () => {
+	try {
+		Notifications.setNotificationHandler({
+			handleNotification: async () => ({
+				shouldShowAlert: true,
+				shouldPlaySound: true,
+				shouldSetBadge: true,
+			}),
+		});
+		
 		if (Platform.OS == "android") {
 			await Notifications.setNotificationChannelAsync("default", {
 				name: "default",
-				importance: Notifications.AndroidImportance.MAX,
-				vibrationPattern: [0, 250, 250, 250],
 				lightColor: "#FF231F7C",
+				vibrationPattern: [0, 250, 250, 250],
+				importance: Notifications.AndroidImportance.MAX,
 			});
 		}
 		
@@ -38,20 +31,39 @@ export const Notification = (title, body) => {
 			}
 			
 			if (finalStatus != "granted") return;
-			console.log((await Notifications.getExpoPushTokenAsync()).data);
+			console.log("TOKEN garantido: " + (await Notifications.getExpoPushTokenAsync()).data);
 		}
-	};
-	
-	// Caminhando a notificação.
-	const sendNotification = async () => {
+	}
+	catch (exception) {
+		console.error("Não foi possível definir as configurações das notificações: " + exception);
+	}
+}
+
+const pushNotification = async (title, body, date) => {
+	try {
+		const trigger = date;
 		await Notifications.scheduleNotificationAsync({
-			trigger: {seconds: 2},
+			trigger,
 			content: {
+				sound: "chime.aiff",
 				title: title,
 				body: body,
 			},
 		});
-	};
-	
-	constructor();
-};
+	}
+	catch (exception) {
+		console.error("Não foi possível enviar a notificação: " + exception);
+	}
+}
+
+const cancelNotifications = async () => {
+	try {
+		defineSettings();
+		await Notifications.cancelAllScheduledNotificationsAsync();
+	}
+	catch (exception) {
+		console.error("Não foi possível cancelar todas as notificações: " + exception);
+	}
+}
+
+export {pushNotification, cancelNotifications};
