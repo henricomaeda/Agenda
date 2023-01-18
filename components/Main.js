@@ -42,7 +42,7 @@ const Main = ({navigation}) => {
 		"maio",
 		"junho",
 		"julho",
-		"augusto",
+		"agosto",
 		"setembro",
 		"outubro",
 		"novembro",

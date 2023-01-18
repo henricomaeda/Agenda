@@ -34,7 +34,7 @@ const Backup = ({navigation}) => {
 	}
 	
 	const decrypt = (text) => {
-		const decrypted = Base64.decode(text);
+		const decrypted = Base64.atob(text);
 		return decrypted;
 	}
 	
