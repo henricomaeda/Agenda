@@ -3,6 +3,7 @@
     "name": "Agenda",
     "slug": "Agenda",
     "version": "1.0.0",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -16,23 +17,23 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "supportsTablet": true
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.bunnitown.Agenda"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#ffffff"
-        }
-      ]
-    ]
+    "extra": {
+      "eas": {
+        "projectId": "0faf5752-0c04-4ae4-9aca-5836a0711413"
+      }
+    }
   }
 }

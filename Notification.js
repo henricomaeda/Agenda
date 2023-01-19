@@ -45,6 +45,7 @@ const pushNotification = async (title, body, date) => {
 		await Notifications.scheduleNotificationAsync({
 			trigger,
 			content: {
+				sound: "chime.aiff",
 				title: title,
 				body: body,
 			},

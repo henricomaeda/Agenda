@@ -5,11 +5,11 @@
 
 Para a instalação do sistema, consulte o diretório:
 	
-	download_apk/
+	application/
 
 Logo em seguida, baixar o arquivo nomeado como:
 	
-	download_apk/Agenda.apk
+	application/Agenda.apk
 
 Posteriormente, instalar o aplicativo (no celular).
 
